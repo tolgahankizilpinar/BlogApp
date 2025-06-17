@@ -1,7 +1,6 @@
 #### .NET 9
 #### EF CORE
 #### Seed Database
-#### MySQL Dtabase Provider
 #### Repository Pattern
 #### CRUD
 #### URL Parameters
