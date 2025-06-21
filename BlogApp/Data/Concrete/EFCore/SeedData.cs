@@ -43,8 +43,9 @@ namespace BlogApp.Data.Concrete.EFCore
                         new Post
                         {
                             Title = "ASP.NET Core",
-                            Content = "ASP.NET Core Dersleri",
+                            Content = "Microsoft tarafından geliştirilen, modern, platformlar arası ve yüksek performanslı bir web uygulama framework’üdür.C# diliyle geliştirilir ve RESTful API’ler, MVC yapıları için yaygın olarak kullanılır.",
                             IsActive = true,
+                            Image = "1.jpg",
                             PublishedOn = DateTime.Now.AddDays(-10),
                             Tags = context.Tags.Take(3).ToList(),
                             UserId = 1
@@ -52,8 +53,9 @@ namespace BlogApp.Data.Concrete.EFCore
                         new Post
                         {
                             Title = "PHP",
-                            Content = "PHP Dersleri",
+                            Content = "Sunucu taraflı çalışan, dinamik web siteleri geliştirmek için kullanılan açık kaynaklı bir programlama dilidir.WordPress gibi popüler CMS sistemlerinin temelini oluşturur.",
                             IsActive = true,
+                            Image = "2.jpg",
                             PublishedOn = DateTime.Now.AddDays(-20),
                             Tags = context.Tags.Take(2).ToList(),
                             UserId = 1
@@ -61,8 +63,9 @@ namespace BlogApp.Data.Concrete.EFCore
                         new Post
                         {
                             Title = "Django",
-                            Content = "Django Dersleri",
+                            Content = "Python ile yazılmış, hızlı geliştirme ve temiz kod yapısı sunan bir web framework’tür.ORM, admin paneli ve güvenlik özellikleriyle öne çıkar.",
                             IsActive = true,
+                            Image = "3.jpg",
                             PublishedOn = DateTime.Now.AddDays(-5),
                             Tags = context.Tags.Take(4).ToList(),
                             UserId = 2
