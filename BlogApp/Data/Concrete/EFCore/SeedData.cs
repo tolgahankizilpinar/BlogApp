@@ -19,11 +19,11 @@ namespace BlogApp.Data.Concrete.EFCore
                 if (!context.Tags.Any())
                 {
                     context.Tags.AddRange(
-                        new Tag { Text = "Web Programlama" },
-                        new Tag { Text = "FullStack" },
-                        new Tag { Text = "Front-End" },
-                        new Tag { Text = "Back-End" },
-                        new Tag { Text = "PHP Programlama" }
+                        new Tag { Text = "Web Programlama", Url ="web-programlama" },
+                        new Tag { Text = "FullStack", Url ="fullstack" },
+                        new Tag { Text = "Front-End", Url ="frontend" },
+                        new Tag { Text = "Back-End", Url ="backend" },
+                        new Tag { Text = "PHP Programlama", Url ="php" }
                     );
                     context.SaveChanges();
                 }
@@ -44,6 +44,7 @@ namespace BlogApp.Data.Concrete.EFCore
                         {
                             Title = "ASP.NET Core",
                             Content = "Microsoft tarafından geliştirilen, modern, platformlar arası ve yüksek performanslı bir web uygulama framework’üdür.C# diliyle geliştirilir ve RESTful API’ler, MVC yapıları için yaygın olarak kullanılır.",
+                            Url = "aspnet-core",
                             IsActive = true,
                             Image = "1.jpg",
                             PublishedOn = DateTime.Now.AddDays(-10),
@@ -54,6 +55,7 @@ namespace BlogApp.Data.Concrete.EFCore
                         {
                             Title = "PHP",
                             Content = "Sunucu taraflı çalışan, dinamik web siteleri geliştirmek için kullanılan açık kaynaklı bir programlama dilidir.WordPress gibi popüler CMS sistemlerinin temelini oluşturur.",
+                            Url = "php",
                             IsActive = true,
                             Image = "2.jpg",
                             PublishedOn = DateTime.Now.AddDays(-20),
@@ -63,10 +65,44 @@ namespace BlogApp.Data.Concrete.EFCore
                         new Post
                         {
                             Title = "Django",
-                            Content = "Python ile yazılmış, hızlı geliştirme ve temiz kod yapısı sunan bir web framework’tür.ORM, admin paneli ve güvenlik özellikleriyle öne çıkar.",
+                            Content = "Python diliyle yazılmış, web uygulamaları geliştirmek için kullanılan bir back-end (sunucu tarafı) framework’tür. Hızlı, güvenli ve ölçeklenebilir projeler için tercih edilir.",
+                            Url = "django",
                             IsActive = true,
                             Image = "3.jpg",
-                            PublishedOn = DateTime.Now.AddDays(-5),
+                            PublishedOn = DateTime.Now.AddDays(-30),
+                            Tags = context.Tags.Take(4).ToList(),
+                            UserId = 2
+                        },
+                        new Post
+                        {
+                            Title = "React",
+                            Content = "Meta (Facebook) tarafından geliştirilen, JavaScript tabanlı bir front-end kütüphanesidir. Bileşen bazlı yapısıyla modern, hızlı ve yeniden kullanılabilir kullanıcı arayüzleri geliştirmeyi sağlar.",
+                            Url = "react-dersleri",
+                            IsActive = true,
+                            Image = "4.jpg",
+                            PublishedOn = DateTime.Now.AddDays(-40),
+                            Tags = context.Tags.Take(4).ToList(),
+                            UserId = 2
+                        },
+                        new Post
+                        {
+                            Title = "Angular",
+                            Content = "Google tarafından geliştirilen, TypeScript tabanlı bir front-end (istemci tarafı) framework’tür. Büyük ve karmaşık tek sayfa uygulamaları (SPA) oluşturmak için kullanılır.",
+                            Url = "angular-dersleri",
+                            IsActive = true,
+                            Image = "5.jpg",
+                            PublishedOn = DateTime.Now.AddDays(-50),
+                            Tags = context.Tags.Take(4).ToList(),
+                            UserId = 2
+                        },
+                        new Post
+                        {
+                            Title = "Web Tasarım",
+                            Content = "Kullanıcıların göreceği web sitesinin görünümünü ve kullanıcı deneyimini planlama ve oluşturma sürecidir. Renk, yazı tipi, düzen ve etkileşimli öğeleri kapsar.",
+                            Url = "web-tasarım",
+                            IsActive = true,
+                            Image = "6.jpg",
+                            PublishedOn = DateTime.Now.AddDays(-60),
                             Tags = context.Tags.Take(4).ToList(),
                             UserId = 2
                         }
