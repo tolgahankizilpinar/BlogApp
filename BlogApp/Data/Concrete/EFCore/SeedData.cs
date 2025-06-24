@@ -19,11 +19,11 @@ namespace BlogApp.Data.Concrete.EFCore
                 if (!context.Tags.Any())
                 {
                     context.Tags.AddRange(
-                        new Tag { Text = "Web Programlama", Url ="web-programlama" },
-                        new Tag { Text = "FullStack", Url ="fullstack" },
-                        new Tag { Text = "Front-End", Url ="frontend" },
-                        new Tag { Text = "Back-End", Url ="backend" },
-                        new Tag { Text = "PHP Programlama", Url ="php" }
+                        new Tag { Text = "Web Programlama", Url = "web-programlama", Color = TagColors.warning },
+                        new Tag { Text = "FullStack", Url = "fullstack", Color = TagColors.danger },
+                        new Tag { Text = "Back-End", Url = "backend", Color = TagColors.secondary },
+                        new Tag { Text = "Front-End", Url = "frontend", Color = TagColors.success },
+                        new Tag { Text = "PHP Programlama", Url = "php", Color = TagColors.primary }
                     );
                     context.SaveChanges();
                 }
@@ -31,14 +31,23 @@ namespace BlogApp.Data.Concrete.EFCore
                 if (!context.Users.Any())
                 {
                     context.Users.AddRange(
-                        new User { UserName = "Tolgahan Kızılpınar" },
-                        new User { UserName = "Tolga Han" }
+                        new User { UserName = "Tolgahan", Image = "person1.jpg" },
+                        new User { UserName = "Han Teknoloji", Image = "person2.jpg"  }
                     );
                     context.SaveChanges();
                 }
 
                 if (!context.Posts.Any())
                 {
+                    var tagWeb = context.Tags.FirstOrDefault(t => t.Text == "Web Programlama");
+                    var tagFullStack = context.Tags.FirstOrDefault(t => t.Text == "FullStack");
+                    var tagBackEnd = context.Tags.FirstOrDefault(t => t.Text == "Back-End");
+                    var tagFrontEnd = context.Tags.FirstOrDefault(t => t.Text == "Front-End");
+                    var tagPHPProgramlama = context.Tags.FirstOrDefault(t => t.Text == "PHP Programlama");
+
+                    if (tagWeb == null || tagFullStack == null || tagBackEnd == null || tagFrontEnd == null || tagPHPProgramlama == null)
+                        return;
+
                     context.Posts.AddRange(
                         new Post
                         {
@@ -48,8 +57,12 @@ namespace BlogApp.Data.Concrete.EFCore
                             IsActive = true,
                             Image = "1.jpg",
                             PublishedOn = DateTime.Now.AddDays(-10),
-                            Tags = context.Tags.Take(3).ToList(),
-                            UserId = 1
+                            Tags = new List<Tag> { tagWeb, tagFullStack, tagBackEnd },
+                            UserId = 1,
+                            Comments = new List<Comment>{
+                                new Comment{Text = "Güzel bir kurs öğrenmek isteyen herkes katılmalı.", PublishedOn = new DateTime(), UserId = 1},
+                                new Comment{Text = "Faydalı bir kurstu ancak süresinin uzatılması daha iyi olurdu.", PublishedOn = new DateTime(), UserId = 2}
+                            }
                         },
                         new Post
                         {
@@ -59,7 +72,7 @@ namespace BlogApp.Data.Concrete.EFCore
                             IsActive = true,
                             Image = "2.jpg",
                             PublishedOn = DateTime.Now.AddDays(-20),
-                            Tags = context.Tags.Take(2).ToList(),
+                            Tags = new List<Tag> { tagWeb, tagFullStack, tagBackEnd },
                             UserId = 1
                         },
                         new Post
@@ -70,7 +83,7 @@ namespace BlogApp.Data.Concrete.EFCore
                             IsActive = true,
                             Image = "3.jpg",
                             PublishedOn = DateTime.Now.AddDays(-30),
-                            Tags = context.Tags.Take(4).ToList(),
+                            Tags = new List<Tag> { tagWeb, tagFullStack, tagBackEnd },
                             UserId = 2
                         },
                         new Post
@@ -81,7 +94,7 @@ namespace BlogApp.Data.Concrete.EFCore
                             IsActive = true,
                             Image = "4.jpg",
                             PublishedOn = DateTime.Now.AddDays(-40),
-                            Tags = context.Tags.Take(4).ToList(),
+                            Tags = new List<Tag> { tagWeb, tagFrontEnd },
                             UserId = 2
                         },
                         new Post
@@ -92,7 +105,7 @@ namespace BlogApp.Data.Concrete.EFCore
                             IsActive = true,
                             Image = "5.jpg",
                             PublishedOn = DateTime.Now.AddDays(-50),
-                            Tags = context.Tags.Take(4).ToList(),
+                            Tags = new List<Tag> { tagWeb, tagFrontEnd },
                             UserId = 2
                         },
                         new Post
@@ -103,11 +116,11 @@ namespace BlogApp.Data.Concrete.EFCore
                             IsActive = true,
                             Image = "6.jpg",
                             PublishedOn = DateTime.Now.AddDays(-60),
-                            Tags = context.Tags.Take(4).ToList(),
+                            Tags = new List<Tag> { tagWeb, tagFrontEnd },
                             UserId = 2
                         }
                     );
-                     context.SaveChanges();
+                    context.SaveChanges();
                 }
             }
         }
