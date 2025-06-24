@@ -60,8 +60,8 @@ namespace BlogApp.Data.Concrete.EFCore
                             Tags = new List<Tag> { tagWeb, tagFullStack, tagBackEnd },
                             UserId = 1,
                             Comments = new List<Comment>{
-                                new Comment{Text = "Güzel bir kurs öğrenmek isteyen herkes katılmalı.", PublishedOn = new DateTime(), UserId = 1},
-                                new Comment{Text = "Faydalı bir kurstu ancak süresinin uzatılması daha iyi olurdu.", PublishedOn = new DateTime(), UserId = 2}
+                                new Comment{Text = "Güzel bir kurs öğrenmek isteyen herkes katılmalı.", PublishedOn = DateTime.Now.AddDays(-20), UserId = 1},
+                                new Comment{Text = "Faydalı bir kurstu ancak süresinin uzatılması daha iyi olurdu.", PublishedOn = DateTime.Now.AddDays(-10), UserId = 2}
                             }
                         },
                         new Post
