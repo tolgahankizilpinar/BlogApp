@@ -62,23 +62,44 @@ namespace BlogApp.Controllers
         [HttpPost]
         public JsonResult AddComment(int PostId, string UserName, string Text)
         {
-            var entity = new Comment
-            {
-                Text = Text,
-                PublishedOn = DateTime.Now,
-                PostId = PostId,
-                User = new User { UserName = UserName, Image = "avatar.jpg" }
-            };
 
-            _commentRepository.CreateComment(entity);
-
-            return Json(new
+            try
             {
-                UserName,
-                Text,
-                entity.PublishedOn,
-                entity.User.Image    
-            });
+                if (string.IsNullOrWhiteSpace(UserName) || string.IsNullOrWhiteSpace(Text))
+                {
+                    return Json(new { success = false, message = "Tüm alanlar gereklidir." });
+                }
+
+                var entity = new Comment
+                {
+                    Text = Text.Trim(),
+                    PublishedOn = DateTime.Now,
+                    PostId = PostId,
+                    User = new User { UserName = UserName.Trim(), Image = "avatar.jpg" }
+                };
+
+                _commentRepository.CreateComment(entity);
+
+                return Json(new
+                {
+                    success = true,
+                    userName = entity.User.UserName,
+                    text = entity.Text,
+                    publishedOn = entity.PublishedOn.ToString("dd.MM.yyyy HH:mm"),
+                    image = entity.User.Image
+                });
+
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = "Yorum eklenirken bir hata oluştu." });
+            }
+
+
+
+
+
+
         }
 
     }

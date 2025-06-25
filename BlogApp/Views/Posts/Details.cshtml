@@ -18,24 +18,28 @@
         <div class="bg-white mt-3">
             <div class="card border-0">
                 <div class="card-header pb-0">
-                    <h4>@Model.Comments.Count() Yorum</h4>
+                    <h4><span id="commentCount">@Model.Comments.Count()</span> Yorum</h4>
                 </div>
                 <div class="card-body">
-                    @foreach (var comment in Model.Comments)
-                    {
-                        <div class="my-4 d-flex">
-                            <img src="/img/@comment.User.Image" class="avatar rounded-circle float-start me-3">
-                            <div>
-                                <div class="mb-2 d-flex">
-                                    <h6 class="me-2">@comment.User.UserName</h6>
-                                    <small>@comment.PublishedOn.ToString("dd.MM.yyyy HH:mm")</small>
+                    <div id="comments">
+                        @foreach (var comment in Model.Comments)
+                        {
+                            <div class="my-4 d-flex">
+                                <img src="/img/@comment.User.Image" class="avatar rounded-circle float-start me-3">
+                                <div>
+                                    <div class="mb-2 d-flex">
+                                        <h6 class="me-2">@comment.User.UserName</h6>
+                                        <small>@comment.PublishedOn.ToString("dd.MM.yyyy HH:mm")</small>
+                                    </div>
+                                    <p>@comment.Text</p>
                                 </div>
-                                <p>@comment.Text</p>
                             </div>
-                        </div>
-                    }
+                        }
+                    </div>
+
                     <hr class="my-4">
                     <h4 class="mb-3">Yorum Ekle</h4>
+                    
                     <form action="/posts/AddComment" method="post">
                         <input type="hidden" id="PostId" name="PostId" value="@Model.PostId">
                         @* <input type="hidden" name="Url" value="@Model.Url"> *@
@@ -48,7 +52,7 @@
                             <textarea type="Text" name="Text" id="Text" rows="4" class="form-control"></textarea>
                         </div>
                         <div class="mb-3">
-                            <button id="btnYorumKayit" type="submit" class="btn btn-primary">Kaydet</button>
+                            <button id="btnYorumKayit" type="button" class="btn btn-primary">Kaydet</button>
                         </div>
                     </form>
                 </div>
@@ -62,23 +66,73 @@
 </div>
 
 @section Scripts {
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
-        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" crossorigin="anonymous"></script>
     <script type="text/javascript">
         $(document).ready(function () {
-           
-            $("#btnYorumKayit").click(function(){
+
+            // Form submit olayını engelle
+            $('form[action="/posts/AddComment"]').on('submit', function (e) {
+                e.preventDefault();
+                console.log("Form submit engellendi");
+                return false;
+            });
+
+            $("#btnYorumKayit").click(function (e) {
+                e.preventDefault();
+                e.stopPropagation(); // Event bubbling'i durdur
+                console.log("Yorum kaydet butonuna tıklandı");
+
+                // Basit validation
+                var username = $('#Username').val().trim();
+                var text = $('#Text').val().trim();
+
+                if (!username || !text) {
+                    alert('Lütfen tüm alanları doldurun!');
+                    return false;
+                }
+
+                // Butonu devre dışı bırak (çoklu tıklama önlemi)
+                $(this).prop('disabled', true).text('Kaydediliyor...');
+
                 $.ajax({
                     type: 'POST',
-                    url: '@Url.Action("AddComment")',
+                    url: '@Url.Action("AddComment", "Posts")',
                     dataType: 'json',
                     data: {
                         PostId: $('#PostId').val(),
-                        UserName: $('#UserName').val(),
-                        Text: $('#Text').val(),
+                        UserName: username,
+                        Text: text
                     },
-                    success: function(yorum){
-                        console.log(yorum);
+                    success: function (yorum) {
+                        $("#comments").append(`
+                                                    <div class="my-4 d-flex">
+                                                        <img src="/img/${yorum.image}" class="avatar rounded-circle float-start me-3">
+                                                        <div>
+                                                            <div class="mb-2 d-flex">
+                                                                <h6 class="me-2">${yorum.userName}</h6>
+                                                                <small>${yorum.publishedOn}</small>
+                                                            </div>
+                                                            <p>${yorum.text}</p>
+                                                        </div>
+                                                    </div>
+                                                `);
+
+                        $('#Username').val('');
+                        $('#Text').val('');
+
+                        var adet = parseInt($("#commentCount").text());
+                        $("#commentCount").text(adet + 1);
+
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("AJAX hatası:", error);
+                        console.error("Status:", status);
+                        console.error("Response:", xhr.responseText);
+                        alert('Yorum eklenirken bir hata oluştu. Lütfen tekrar deneyin.');
+                    },
+                    complete: function() {
+                        // Butonu tekrar aktif et
+                        $("#btnYorumKayit").prop('disabled', false).text('Kaydet');
                     }
                 });
 
