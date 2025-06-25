@@ -42,7 +42,25 @@ namespace BlogApp.Controllers
                         .FirstOrDefaultAsync(p => p.Url == url));
         }
 
-        public IActionResult AddComment(int PostId, string UserName, string Text, string Url)
+        // public IActionResult AddComment(int PostId, string UserName, string Text, string Url)
+        // {
+        //     var entity = new Comment
+        //     {
+        //         Text = Text,
+        //         PublishedOn = DateTime.Now,
+        //         PostId = PostId,
+        //         User = new User { UserName = UserName, Image = "avatar.jpg" }
+        //     };
+
+        //     _commentRepository.CreateComment(entity);
+
+        //     //return Redirect("/posts/details/" + Url);
+        //     return RedirectToRoute("post_details", new {url = Url});
+        // }
+
+
+        [HttpPost]
+        public JsonResult AddComment(int PostId, string UserName, string Text)
         {
             var entity = new Comment
             {
@@ -54,8 +72,14 @@ namespace BlogApp.Controllers
 
             _commentRepository.CreateComment(entity);
 
-            //return Redirect("/posts/details/" + Url);
-            return RedirectToRoute("post_details", new {url = Url});
+            return Json(new
+            {
+                UserName,
+                Text,
+                entity.PublishedOn,
+                entity.User.Image    
+            });
         }
+
     }
 }

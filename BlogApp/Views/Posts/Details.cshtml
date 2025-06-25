@@ -28,7 +28,7 @@
                             <div>
                                 <div class="mb-2 d-flex">
                                     <h6 class="me-2">@comment.User.UserName</h6>
-                                    <small>@comment.PublishedOn.ToString("G")</small>
+                                    <small>@comment.PublishedOn.ToString("dd.MM.yyyy HH:mm")</small>
                                 </div>
                                 <p>@comment.Text</p>
                             </div>
@@ -37,8 +37,8 @@
                     <hr class="my-4">
                     <h4 class="mb-3">Yorum Ekle</h4>
                     <form action="/posts/AddComment" method="post">
-                        <input type="hidden" name="PostId" value="@Model.PostId">
-                        <input type="hidden" name="Url" value="@Model.Url">
+                        <input type="hidden" id="PostId" name="PostId" value="@Model.PostId">
+                        @* <input type="hidden" name="Url" value="@Model.Url"> *@
                         <div class="mb-3">
                             <label for="Username" class="form-label">Adınız</label>
                             <input type="text" name="Username" id="Username" class="form-control">
@@ -48,7 +48,7 @@
                             <textarea type="Text" name="Text" id="Text" rows="4" class="form-control"></textarea>
                         </div>
                         <div class="mb-3">
-                            <button type="submit" class="btn btn-primary">Kaydet</button>
+                            <button id="btnYorumKayit" type="submit" class="btn btn-primary">Kaydet</button>
                         </div>
                     </form>
                 </div>
@@ -60,3 +60,31 @@
         <vc:new-posts></vc:new-posts>
     </div>
 </div>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+           
+            $("#btnYorumKayit").click(function(){
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("AddComment")',
+                    dataType: 'json',
+                    data: {
+                        PostId: $('#PostId').val(),
+                        UserName: $('#UserName').val(),
+                        Text: $('#Text').val(),
+                    },
+                    success: function(yorum){
+                        console.log(yorum);
+                    }
+                });
+
+                return false;
+            });
+
+        });
+    </script>
+}

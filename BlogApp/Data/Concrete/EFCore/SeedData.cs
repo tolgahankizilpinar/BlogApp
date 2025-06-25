@@ -19,11 +19,10 @@ namespace BlogApp.Data.Concrete.EFCore
                 if (!context.Tags.Any())
                 {
                     context.Tags.AddRange(
-                        new Tag { Text = "Web Programlama", Url = "web-programlama", Color = TagColors.warning },
+                        new Tag { Text = "Web Programlama", Url = "web-programlama", Color = TagColors.primary },
                         new Tag { Text = "FullStack", Url = "fullstack", Color = TagColors.danger },
                         new Tag { Text = "Back-End", Url = "backend", Color = TagColors.secondary },
-                        new Tag { Text = "Front-End", Url = "frontend", Color = TagColors.success },
-                        new Tag { Text = "PHP Programlama", Url = "php", Color = TagColors.primary }
+                        new Tag { Text = "Front-End", Url = "frontend", Color = TagColors.success }
                     );
                     context.SaveChanges();
                 }
@@ -43,9 +42,8 @@ namespace BlogApp.Data.Concrete.EFCore
                     var tagFullStack = context.Tags.FirstOrDefault(t => t.Text == "FullStack");
                     var tagBackEnd = context.Tags.FirstOrDefault(t => t.Text == "Back-End");
                     var tagFrontEnd = context.Tags.FirstOrDefault(t => t.Text == "Front-End");
-                    var tagPHPProgramlama = context.Tags.FirstOrDefault(t => t.Text == "PHP Programlama");
 
-                    if (tagWeb == null || tagFullStack == null || tagBackEnd == null || tagFrontEnd == null || tagPHPProgramlama == null)
+                    if (tagWeb == null || tagFullStack == null || tagBackEnd == null || tagFrontEnd == null)
                         return;
 
                     context.Posts.AddRange(
