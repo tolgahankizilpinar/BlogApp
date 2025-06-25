@@ -39,7 +39,7 @@
 
                     <hr class="my-4">
                     <h4 class="mb-3">Yorum Ekle</h4>
-                    
+
                     <form action="/posts/AddComment" method="post">
                         <input type="hidden" id="PostId" name="PostId" value="@Model.PostId">
                         @* <input type="hidden" name="Url" value="@Model.Url"> *@
@@ -49,7 +49,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="Text" class="form-label">Yorum</label>
-                            <textarea type="Text" name="Text" id="Text" rows="4" class="form-control"></textarea>
+                            <textarea name="Text" id="Text" rows="4" class="form-control"></textarea>
                         </div>
                         <div class="mb-3">
                             <button id="btnYorumKayit" type="button" class="btn btn-primary">Kaydet</button>
@@ -66,21 +66,19 @@
 </div>
 
 @section Scripts {
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
     <script type="text/javascript">
         $(document).ready(function () {
 
             // Form submit olayını engelle
             $('form[action="/posts/AddComment"]').on('submit', function (e) {
                 e.preventDefault();
-                console.log("Form submit engellendi");
                 return false;
             });
 
             $("#btnYorumKayit").click(function (e) {
                 e.preventDefault();
-                e.stopPropagation(); // Event bubbling'i durdur
-                console.log("Yorum kaydet butonuna tıklandı");
 
                 // Basit validation
                 var username = $('#Username').val().trim();
@@ -104,25 +102,28 @@
                         Text: text
                     },
                     success: function (yorum) {
-                        $("#comments").append(`
-                                                    <div class="my-4 d-flex">
-                                                        <img src="/img/${yorum.image}" class="avatar rounded-circle float-start me-3">
-                                                        <div>
-                                                            <div class="mb-2 d-flex">
-                                                                <h6 class="me-2">${yorum.userName}</h6>
-                                                                <small>${yorum.publishedOn}</small>
-                                                            </div>
-                                                            <p>${yorum.text}</p>
-                                                        </div>
-                                                    </div>
-                                                `);
 
+                        // Yeni yorumu ekle
+                        $("#comments").append(`
+                                <div class="my-4 d-flex">
+                                    <img src="/img/${yorum.image}" class="avatar rounded-circle float-start me-3">
+                                    <div>
+                                        <div class="mb-2 d-flex">
+                                            <h6 class="me-2">${yorum.userName}</h6>
+                                            <small>${yorum.publishedOn}</small>
+                                        </div>
+                                        <p>${yorum.text}</p>
+                                    </div>
+                                </div>
+                            `);
+
+                        // Formu temizle
                         $('#Username').val('');
                         $('#Text').val('');
 
+                        // Yorum sayısını güncelle
                         var adet = parseInt($("#commentCount").text());
                         $("#commentCount").text(adet + 1);
-
                     },
                     error: function (xhr, status, error) {
                         console.error("AJAX hatası:", error);
@@ -130,7 +131,7 @@
                         console.error("Response:", xhr.responseText);
                         alert('Yorum eklenirken bir hata oluştu. Lütfen tekrar deneyin.');
                     },
-                    complete: function() {
+                    complete: function () {
                         // Butonu tekrar aktif et
                         $("#btnYorumKayit").prop('disabled', false).text('Kaydet');
                     }

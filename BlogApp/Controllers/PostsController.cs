@@ -62,7 +62,6 @@ namespace BlogApp.Controllers
         [HttpPost]
         public JsonResult AddComment(int PostId, string UserName, string Text)
         {
-
             try
             {
                 if (string.IsNullOrWhiteSpace(UserName) || string.IsNullOrWhiteSpace(Text))
@@ -95,12 +94,6 @@ namespace BlogApp.Controllers
                 return Json(new { success = false, message = "Yorum eklenirken bir hata oluştu." });
             }
 
-
-
-
-
-
         }
-
     }
 }
