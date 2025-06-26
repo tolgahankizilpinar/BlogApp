@@ -30,8 +30,8 @@ namespace BlogApp.Data.Concrete.EFCore
                 if (!context.Users.Any())
                 {
                     context.Users.AddRange(
-                        new User { UserName = "Tolgahan", Image = "person1.jpg" },
-                        new User { UserName = "Han Teknoloji", Image = "person2.jpg"  }
+                        new User { UserName = "Tolga Han", Name = "Tolga Han", Email = "info@tolgahan.com", Password = "123456", Image = "person1.jpg" },
+                        new User { UserName = "Han Teknoloji", Name = "Han Teknoloji", Email = "info@hanteknoloji.com", Password = "123456", Image = "person2.jpg"  }
                     );
                     context.SaveChanges();
                 }
