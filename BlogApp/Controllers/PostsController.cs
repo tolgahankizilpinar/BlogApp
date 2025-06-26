@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using BlogApp.Data.Abstract;
 using BlogApp.Entity;
 using BlogApp.Models;
@@ -18,9 +19,7 @@ namespace BlogApp.Controllers
         }
 
         public async Task<IActionResult> Index(string tag)
-        {
-            var claims = User.Claims;
-            
+        {         
             var posts = _postRepository.Posts;
 
             if (!string.IsNullOrEmpty(tag))
@@ -62,21 +61,20 @@ namespace BlogApp.Controllers
 
 
         [HttpPost]
-        public JsonResult AddComment(int PostId, string UserName, string Text)
+        public JsonResult AddComment(int PostId, string Text)
         {
             try
             {
-                if (string.IsNullOrWhiteSpace(UserName) || string.IsNullOrWhiteSpace(Text))
-                {
-                    return Json(new { success = false, message = "Tüm alanlar gereklidir." });
-                }
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                var userName = User.FindFirstValue(ClaimTypes.Name);
+                var avatar = User.FindFirstValue(ClaimTypes.UserData);
 
                 var entity = new Comment
                 {
                     Text = Text.Trim(),
                     PublishedOn = DateTime.Now,
                     PostId = PostId,
-                    User = new User { UserName = UserName.Trim(), Image = "avatar.jpg" }
+                    UserId = int.Parse(userId ?? "")
                 };
 
                 _commentRepository.CreateComment(entity);
@@ -84,10 +82,10 @@ namespace BlogApp.Controllers
                 return Json(new
                 {
                     success = true,
-                    userName = entity.User.UserName,
+                    userName = userName,
                     text = entity.Text,
                     publishedOn = entity.PublishedOn.ToString("dd.MM.yyyy HH:mm"),
-                    image = entity.User.Image
+                    image = avatar
                 });
 
             }
