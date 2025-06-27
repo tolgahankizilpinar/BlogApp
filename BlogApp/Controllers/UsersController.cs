@@ -21,10 +21,10 @@ namespace BlogApp.Controllers
 
 
         public IActionResult Register()
-        {    
+        {
             return View();
         }
-        
+
         [HttpPost]
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
@@ -47,7 +47,7 @@ namespace BlogApp.Controllers
                 {
                     ModelState.AddModelError("", "Bu Kullanıcı Adı ve ya Email zaten kullanılıyor.");
                 }
-                
+
             }
 
             return View(model);
@@ -67,48 +67,35 @@ namespace BlogApp.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
+                return View(model);
+
+            var user = _userRepository.Users
+                .FirstOrDefault(u => u.Email == model.Email && u.Password == model.Password);
+
+            if (user == null)
             {
-                var isUser = _userRepository.Users.FirstOrDefault(x => x.Email == model.Email && x.Password == model.Password);
-
-                if (isUser != null)
-                {
-                    var userClaims = new List<Claim>();
-
-                    userClaims.Add(new Claim(ClaimTypes.NameIdentifier, isUser.UserId.ToString()));
-                    userClaims.Add(new Claim(ClaimTypes.Name, isUser.UserName ?? ""));
-                    userClaims.Add(new Claim(ClaimTypes.GivenName, isUser.Name ?? ""));
-                    userClaims.Add(new Claim(ClaimTypes.UserData, isUser.Image ?? ""));
-
-                    if (isUser.Email == "info@tolgahan.com")
-                    {
-                        userClaims.Add(new Claim(ClaimTypes.Role, "admin"));
-                    }
-
-                    var claimsIdentity = new ClaimsIdentity(userClaims, CookieAuthenticationDefaults.AuthenticationScheme);
-
-                    var authProperties = new AuthenticationProperties
-                    {
-                        IsPersistent = true
-                    };
-
-                    // daha önce oluşturulan cookie varsa onu siler
-                    await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-
-                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
-                           new ClaimsPrincipal(claimsIdentity),
-                           authProperties
-                           );
-
-                    return RedirectToAction("Index", "Posts");
-                }
-                else
-                {
-                    ModelState.AddModelError("", "Kullanıcı adı veya şifre hatalı.");
-                }
+                ModelState.AddModelError("", "Geçersiz kullanıcı bilgisi.");
+                return View(model);
             }
 
-            return View();
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name, user.UserName),
+                new Claim(ClaimTypes.NameIdentifier, user.UserId.ToString())
+            };
+
+            if (user.Email == "info@tolgahan.com")
+            {
+                claims.Add(new Claim(ClaimTypes.Role, "admin"));
+            }
+
+            var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            var principal = new ClaimsPrincipal(identity);
+
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+
+            return RedirectToAction("Index", "Posts");
         }
 
         public async Task<IActionResult> Logout()

@@ -50,6 +50,7 @@ namespace BlogApp.Data.Concrete.EFCore
                         new Post
                         {
                             Title = "ASP.NET Core",
+                            Description = "ASP.NET Core tanım alanıdır.",
                             Content = "Microsoft tarafından geliştirilen, modern, platformlar arası ve yüksek performanslı bir web uygulama framework’üdür.C# diliyle geliştirilir ve RESTful API’ler, MVC yapıları için yaygın olarak kullanılır.",
                             Url = "aspnet-core",
                             IsActive = true,
@@ -65,6 +66,7 @@ namespace BlogApp.Data.Concrete.EFCore
                         new Post
                         {
                             Title = "PHP",
+                            Description = "PHP tanım alanıdır.",
                             Content = "Sunucu taraflı çalışan, dinamik web siteleri geliştirmek için kullanılan açık kaynaklı bir programlama dilidir.WordPress gibi popüler CMS sistemlerinin temelini oluşturur.",
                             Url = "php",
                             IsActive = true,
@@ -76,6 +78,7 @@ namespace BlogApp.Data.Concrete.EFCore
                         new Post
                         {
                             Title = "Django",
+                            Description = "dJANGO tanım alanıdır.",
                             Content = "Python diliyle yazılmış, web uygulamaları geliştirmek için kullanılan bir back-end (sunucu tarafı) framework’tür. Hızlı, güvenli ve ölçeklenebilir projeler için tercih edilir.",
                             Url = "django",
                             IsActive = true,
@@ -87,6 +90,7 @@ namespace BlogApp.Data.Concrete.EFCore
                         new Post
                         {
                             Title = "React",
+                            Description = "React tanım alanıdır.",
                             Content = "Meta (Facebook) tarafından geliştirilen, JavaScript tabanlı bir front-end kütüphanesidir. Bileşen bazlı yapısıyla modern, hızlı ve yeniden kullanılabilir kullanıcı arayüzleri geliştirmeyi sağlar.",
                             Url = "react-dersleri",
                             IsActive = true,
@@ -98,6 +102,7 @@ namespace BlogApp.Data.Concrete.EFCore
                         new Post
                         {
                             Title = "Angular",
+                            Description = "Angular tanım alanıdır.",
                             Content = "Google tarafından geliştirilen, TypeScript tabanlı bir front-end (istemci tarafı) framework’tür. Büyük ve karmaşık tek sayfa uygulamaları (SPA) oluşturmak için kullanılır.",
                             Url = "angular-dersleri",
                             IsActive = true,
@@ -109,6 +114,7 @@ namespace BlogApp.Data.Concrete.EFCore
                         new Post
                         {
                             Title = "Web Tasarım",
+                            Description = "Web Tasarım tanım alanıdır.",
                             Content = "Kullanıcıların göreceği web sitesinin görünümünü ve kullanıcı deneyimini planlama ve oluşturma sürecidir. Renk, yazı tipi, düzen ve etkileşimli öğeleri kapsar.",
                             Url = "web-tasarım",
                             IsActive = true,
