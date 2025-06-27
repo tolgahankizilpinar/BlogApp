@@ -1,9 +1,11 @@
 using System.Security.Claims;
 using BlogApp.Data.Abstract;
+using BlogApp.Entity;
 using BlogApp.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace BlogApp.Controllers
@@ -15,6 +17,40 @@ namespace BlogApp.Controllers
         public UsersController(IUserRepository userRepository)
         {
             _userRepository = userRepository;
+        }
+
+
+        public IActionResult Register()
+        {    
+            return View();
+        }
+        
+        [HttpPost]
+        public async Task<IActionResult> Register(RegisterViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await _userRepository.Users.FirstOrDefaultAsync(x => x.UserName == model.UserName || x.Email == model.Email);
+                if (user == null)
+                {
+                    _userRepository.CreateUser(new User
+                    {
+                        UserName = model.UserName,
+                        Name = model.Name,
+                        Email = model.Email,
+                        Password = model.Password,
+                        Image = "avatar.jpg"
+                    });
+                    return RedirectToAction("Login");
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Bu Kullanıcı Adı ve ya Email zaten kullanılıyor.");
+                }
+                
+            }
+
+            return View(model);
         }
 
         public IActionResult Login()

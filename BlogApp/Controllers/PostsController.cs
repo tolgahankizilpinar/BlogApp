@@ -66,7 +66,7 @@ namespace BlogApp.Controllers
             try
             {
                 var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                var userName = User.FindFirstValue(ClaimTypes.Name);
+                var userNameClaim = User.FindFirstValue(ClaimTypes.Name);
                 var avatar = User.FindFirstValue(ClaimTypes.UserData);
 
                 var entity = new Comment
@@ -82,14 +82,14 @@ namespace BlogApp.Controllers
                 return Json(new
                 {
                     success = true,
-                    userName = userName,
+                    userNameClaim,
                     text = entity.Text,
                     publishedOn = entity.PublishedOn.ToString("dd.MM.yyyy HH:mm"),
-                    image = avatar
+                    avatar
                 });
 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return Json(new { success = false, message = "Yorum eklenirken bir hata oluştu." });
             }
